@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     fprintf(stdout, "Listening on port %d\n", PORT);
 
     const int sighandler;
-    signal(SIGINT,  sighandler);
+    //signal(SIGINT,  sighandler);
 
     int r;
     struct sockaddr_in server_addr, client;
