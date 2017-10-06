@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/raquelitarosaguilar/CLionProjects/test_server/src/httpd.c
+sys/socket.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+string.h
+-
+unistd.h
+-
+stdio.h
+-
+stdlib.h
+-
+

@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.8)
+project(pa2)
+
+set(CMAKE_C_STANDARD 11)
+include_directories(/usr/local/include/glib-2.0)
+set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ")
+link_directories(/usr/local/lib)
+set(SOURCE_FILES src/httpd.c)
+add_executable(pa2 ${SOURCE_FILES})
+target_link_libraries(pa2 glib-2.0.dylib)
