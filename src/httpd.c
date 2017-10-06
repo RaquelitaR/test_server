@@ -43,7 +43,8 @@ int main(int argc, char *argv[]) {
     int PORT = atoi(argv[1]);
     fprintf(stdout, "Listening on port %d\n", PORT);
 
-    const int sighandler;
+    // Commented the below out cause it was causing error when compiling
+    //const int sighandler;
     //signal(SIGINT,  sighandler);
 
     int r;
