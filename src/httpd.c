@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 
         // We first have to accept a TCP connection, connfd is a fresh
         // handle dedicated to this connection.
-        socklen_t len = (socklen_t) sizeof(client);
+        socklen_t len = (socklen_t), sizeof(client);
         connfd = accept(sockfd, (struct sockaddr *) &client, &len);
         if (connfd < 0) {
             perror("Connection not accpted\n");
@@ -129,21 +129,21 @@ int main(int argc, char *argv[]) {
         strcat(response, "127.0.0.1:6525");
         strcat(response, "</html>");
 
-        r = send(connfd, response, (size_t), (sizeof(char) * strlen(response)), 0);
-        if (r == -1) {
-            perror("send");
+        r = send(connfd, response, (size_t) n, 0);
+        if (r < 0) {
+            perror("Sending");
             exit(EXIT_FAILURE);
         }
 
         // Close the connection.
         r = shutdown(connfd, SHUT_RDWR);
-        if (r == -1) {
-            perror("shutdown");
+        if (r < 0) {
+            perror("Shutdown");
             exit(EXIT_FAILURE);
         }
         r  = close(connfd);
-        if (r == -1) {
-            perror("close");
+        if (r < 0) {
+            perror("Closing");
             exit(EXIT_FAILURE);
         }
     }
