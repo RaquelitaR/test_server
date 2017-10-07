@@ -18,6 +18,7 @@
 const char *LOG_FILE = "log_file.log";
 FILE *log_fd;
 int sockfd, r;
+fd_set connfd;
 struct sockaddr_in server, client;
 
 
@@ -32,7 +33,6 @@ void sighandler() {
 
 int main(int argc, char *argv[]) {
 
-    fd_set connfds;
     // check number of arguments
     if (argc != 2) {
         fprintf(stderr, "expected usage: %s <port> \n", argv[0] );
