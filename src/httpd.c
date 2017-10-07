@@ -544,6 +544,6 @@ void handleData() {
 void closeConnection(int i) {
     shutdown(connections[i], SHUT_RDWR);
     close(connections[i]);
-    connections[i] = 0;m
-            active_count[i] = 0;
+    connections[i] = 0;
+    active_count[i] = 0;
 }
