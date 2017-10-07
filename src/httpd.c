@@ -85,8 +85,8 @@ int main(int argc, char *argv[]) {
         exit(0);
     }
     // set portnumber: test
-    int PORT = atoi(argv[1]);
-    fprintf(stdout, "Listening on port %d\n", PORT);
+    //int PORT = atoi(argv[1]);
+    //fprintf(stdout, "Listening on port %d\n", PORT);
 
     int server_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (server_sock == -1) {
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(PORT);
+    serv_addr.sin_port = htons(61278);
 
     if (bind(server_sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
         perror("ERROR: Failed to bind socket\n");
