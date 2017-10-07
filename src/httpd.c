@@ -1,7 +1,12 @@
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/select.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <ctype.h>
+#include <time.h>
+#include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -124,7 +129,7 @@ int main(int argc, char *argv[]) {
         strcat(response, "127.0.0.1:6525");
         strcat(response, "</html>");
 
-        r = send(connfd, response, (size_t), sizeof(char) * strlen(response), 0);
+        r = send(connfd, response, (size_t), (sizeof(char) * strlen(response)), 0);
         if (r == -1) {
             perror("send");
             exit(EXIT_FAILURE);
