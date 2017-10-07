@@ -80,10 +80,10 @@ void write_head(int client_sock) { // Add any extra parameter
 int main(int argc, char *argv[]) {
 
     // check number of arguments
-    if (argc != 2) {
+    /*if (argc != 2) {
         fprintf(stderr, "expected usage: %s <port> \n", argv[0] );
         exit(0);
-    }
+    }*/
     // set portnumber: test
     //int PORT = atoi(argv[1]);
     //fprintf(stdout, "Listening on port %d\n", PORT);
