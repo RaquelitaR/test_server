@@ -9,6 +9,12 @@
 
 const char *LOG_FILE = "log_file.log";
 FILE *log_fd;
+struct sockaddr_in serv_addr;
+struct sockaddr_in client_addr;
+
+// FUNCTIONS
+
+void print_logfile();
 
 void error(char *msg) {
     perror(msg);
@@ -16,6 +22,7 @@ void error(char *msg) {
 }
 
 void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) {
+
     char term[] = "\r\n";
     char body[4098];
     memset(&body, 0, sizeof(char) * 4098);
@@ -61,6 +68,7 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     strcat(response, term);
 
     printf("\nResponse\n%s\n", response);
+    print_logfile();
 
     if (write(client_sock, response, (int) strlen(response)) == -1) {
         error("ERROR writing to socket");
@@ -77,6 +85,16 @@ void write_head(int client_sock) { // Add any extra parameter
     // Return: HTTP/1.1 200 OK
 }
 
+void print_logfile(){
+
+    int status = 200;
+    GTimeVal time;
+    g_get_current_time(&time);
+    time.tv_sec = 0;
+    gchar *now = g_time_val_to_iso8601(&time);
+    fprintf(log_fd, ": %s %s %d\n", now, inet_ntoa(client_addr.sin_addr), status);
+}
+
 int main(int argc, char *argv[]) {
 
     // check number of arguments
@@ -88,13 +106,20 @@ int main(int argc, char *argv[]) {
     //int PORT = atoi(argv[1]);
     //fprintf(stdout, "Listening on port %d\n", PORT);
 
+    // Open the log file
+    log_fd = fopen(LOG_FILE, "a");
+    if(log_fd == NULL){
+        printf("Failed to open the log file\n");
+        exit(EXIT_FAILURE);
+    }
+
     int server_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (server_sock == -1) {
         perror("Failed to create a socket");
         exit(EXIT_FAILURE);
     }
 
-    struct sockaddr_in serv_addr;
+    //struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -108,7 +133,7 @@ int main(int argc, char *argv[]) {
     listen(server_sock, 10);
 
     int client_sock;
-    struct sockaddr_in client_addr;
+    //struct sockaddr_in client_addr;
     memset(&client_addr, 0, sizeof(client_addr));
     socklen_t client_size = sizeof(client_addr);
     client_sock = accept(server_sock, (struct sockaddr *) &client_addr, &client_size);
@@ -146,10 +171,4 @@ int main(int argc, char *argv[]) {
         perror("Closing socket");
         exit(EXIT_FAILURE);
     }
-
-    /*if (0 && shutdown(server_sock, 2) == -1) { // Ignore this, I was trying to find out how to close everything
-        perror("ERROR shutdown socket");
-    }*/
-
-    return 0;
 }
