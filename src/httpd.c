@@ -18,13 +18,6 @@ int client_sock;
 // FUNCTIONS
 void print_logfile();
 
-
-
-void error(char *msg) {
-    perror(msg);
-    exit(1);
-}
-
 void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) {
 
     char term[] = "\r\n";
@@ -74,7 +67,7 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     printf("\nResponse\n%s\n", response);
 
     if (write(client_sock, response, (int) strlen(response)) == -1) {
-        error("ERROR writing to socket");
+        perror("ERROR writing to socket");
     }
 }
 // TODO:
@@ -96,6 +89,7 @@ void print_logfile(){
     time.tv_sec = 0;
     gchar *now = g_time_val_to_iso8601(&time);
     fprintf(log_fd, ": %s %s %d\n", now, inet_ntoa(client_addr.sin_addr), status);
+    // This is not finished
 }
 
 int main(int argc, char *argv[]) {
@@ -157,6 +151,7 @@ int main(int argc, char *argv[]) {
     gchar **split = g_strsplit(request, "\n", -1);
     gchar **first = g_strsplit(*split, " ", -1);
 
+    // Checking which response the server
     if (strcmp(first[0], "GET") == 0) {
         write_get(client_sock, &client_addr, first[1]);
     } else if (strcmp(first[0], "PUT") == 0) {

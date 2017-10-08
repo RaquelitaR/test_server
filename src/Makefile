@@ -7,7 +7,7 @@ LDLIBS = $(shell pkg-config --libs glib-2.0)
 
 .DEFAULT: all
 .PHONY: all
-all: httpd
+all: $(CC) $(CFLAGS) httpd.c -o httpd
 
 clean:
 	rm -f *.o
