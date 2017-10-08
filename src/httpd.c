@@ -72,16 +72,11 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
 }
 
 // TODO: Return: HTTP/1.1 200 OK
-void write_head(int client_sock, struct sockaddr_in *client_addr, char *webpage) { // Add any extra parameter
-    char response[] = "\r\n";
-    memset(&response, 0, sizeof(char) * 4098);
-    strcat(response, "HTTP/1.1 200 OK");
-    printf("\nResponse\n%s\n", response);
-
-    if (write(client_sock, response, (int) strlen(response)) == -1){
-        perror("ERROR writing to socket");
-    }
-
+void write_head(int client_sock, const char *file) { // Add any extra parameter
+    char response[1024];
+    (void)file;
+    strcat(response, "HTTP/1.0 200 OK\r\n");
+    printf(client_sock, response, strlen(response), 0);
 }
 
 // TODO:
