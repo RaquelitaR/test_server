@@ -16,8 +16,9 @@ struct sockaddr_in client_addr;
 int client_sock;
 
 // FUNCTIONS
-
 void print_logfile();
+
+
 
 void error(char *msg) {
     perror(msg);
@@ -100,13 +101,13 @@ void print_logfile(){
 int main(int argc, char *argv[]) {
 
     // check number of arguments
-    /*if (argc != 2) {
+    if (argc != 2) {
         fprintf(stderr, "expected usage: %s <port> \n", argv[0] );
         exit(0);
-    }*/
+    }
     // set portnumber: test
-    //int PORT = atoi(argv[1]);
-    //fprintf(stdout, "Listening on port %d\n", PORT);
+    int PORT = atoi(argv[1]);
+    fprintf(stdout, "Listening on port %d\n", PORT);
 
     // Open the log file
     log_fd = fopen(LOG_FILE, "a");
@@ -126,7 +127,7 @@ int main(int argc, char *argv[]) {
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(61278);
+    serv_addr.sin_port = htons(PORT);
 
     if (bind(server_sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
         perror("ERROR: Failed to bind socket\n");
