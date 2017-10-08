@@ -7,10 +7,13 @@
 #include <string.h>
 #include <glib.h>
 
+//61278
+
 const char *LOG_FILE = "log_file.log";
 FILE *log_fd;
 struct sockaddr_in serv_addr;
 struct sockaddr_in client_addr;
+int client_sock;
 
 // FUNCTIONS
 
@@ -68,7 +71,6 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     strcat(response, term);
 
     printf("\nResponse\n%s\n", response);
-    print_logfile();
 
     if (write(client_sock, response, (int) strlen(response)) == -1) {
         error("ERROR writing to socket");
@@ -76,7 +78,7 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
 }
 // TODO:
 void write_put(int client_sock) { // Add any extra parameter
-    // for put is similar to the get one but instead of the body
+    // PUT is similar to the GET but instead of the body
     // you have to put the body of the request they sent
 }
 
@@ -113,13 +115,14 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
+    print_logfile();
+
     int server_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (server_sock == -1) {
         perror("Failed to create a socket");
         exit(EXIT_FAILURE);
     }
 
-    //struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -132,8 +135,7 @@ int main(int argc, char *argv[]) {
 
     listen(server_sock, 10);
 
-    int client_sock;
-    //struct sockaddr_in client_addr;
+
     memset(&client_addr, 0, sizeof(client_addr));
     socklen_t client_size = sizeof(client_addr);
     client_sock = accept(server_sock, (struct sockaddr *) &client_addr, &client_size);
