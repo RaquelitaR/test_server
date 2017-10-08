@@ -70,15 +70,29 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
         perror("ERROR writing to socket");
     }
 }
+
+// TODO: Return: HTTP/1.1 200 OK
+void write_head(int client_sock) { // Add any extra parameter
+
+    char body[4098];
+    memset(&body, 0, sizeof(char) * 4098);
+    strcat(body, "<!DOCTYPE html><html><head>");
+
+    char response[4098];
+    memset(&response, 0, sizeof(char) * 4098);
+    strcat(response, "HTTP/1.1 200 OK");
+
+    printf("\nResponse\n%s\n", response);
+
+    if (write(client_sock, response, (int) strlen(response)) == -1) {
+        perror("ERROR writing to socket");
+    }
+}
+
 // TODO:
 void write_put(int client_sock) { // Add any extra parameter
     // PUT is similar to the GET but instead of the body
     // you have to put the body of the request they sent
-}
-
-// TODO:
-void write_head(int client_sock) { // Add any extra parameter
-    // Return: HTTP/1.1 200 OK
 }
 
 void print_logfile(){
@@ -89,7 +103,8 @@ void print_logfile(){
     time.tv_sec = 0;
     gchar *now = g_time_val_to_iso8601(&time);
     fprintf(log_fd, ": %s %s %d\n", now, inet_ntoa(client_addr.sin_addr), status);
-    // This is not finished
+    fflush(log_fd);
+    // This is not finished cause there is nothing written in the file yet
 }
 
 int main(int argc, char *argv[]) {
@@ -121,7 +136,7 @@ int main(int argc, char *argv[]) {
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(PORT);
+    serv_addr.sin_port = htons(PORT); // Connect to server
 
     if (bind(server_sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
         perror("ERROR: Failed to bind socket\n");
@@ -169,4 +184,5 @@ int main(int argc, char *argv[]) {
         perror("Closing socket");
         exit(EXIT_FAILURE);
     }
+    return (EXIT_SUCCESS);
 }
