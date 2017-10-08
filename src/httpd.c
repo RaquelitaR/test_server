@@ -72,7 +72,7 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
 }
 
 // TODO: Return: HTTP/1.1 200 OK
-void write_head(int client_sock) { // Add any extra parameter
+void write_head(int client_sock, struct sockaddr_in *client_addr, char *webpage) { // Add any extra parameter
     char response[] = "\r\n";
     memset(&response, 0, sizeof(char) * 4098);
     strcat(response, "HTTP/1.1 200 OK");
