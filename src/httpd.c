@@ -73,20 +73,15 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
 
 // TODO: Return: HTTP/1.1 200 OK
 void write_head(int client_sock) { // Add any extra parameter
-
-    char body[4098];
-    memset(&body, 0, sizeof(char) * 4098);
-    strcat(body, "<!DOCTYPE html><html><head>");
-
-    char response[4098];
+    char response[] = "\r\n";
     memset(&response, 0, sizeof(char) * 4098);
     strcat(response, "HTTP/1.1 200 OK");
-
     printf("\nResponse\n%s\n", response);
 
-    if (write(client_sock, response, (int) strlen(response)) == -1) {
+    if (write(client_sock, response, (int) strlen(response)) == -1){
         perror("ERROR writing to socket");
     }
+
 }
 
 // TODO:
@@ -103,7 +98,9 @@ void print_logfile(){
     time.tv_sec = 0;
     gchar *now = g_time_val_to_iso8601(&time);
     fprintf(log_fd, ": %s %s %d\n", now, inet_ntoa(client_addr.sin_addr), status);
-    fflush(log_fd);
+    fputs(log_fd, inet_ntoa(client_addr.sin_addr));
+    fclose(log_fd);
+    close(client_sock);
     // This is not finished cause there is nothing written in the file yet
 }
 
@@ -177,7 +174,7 @@ int main(int argc, char *argv[]) {
 
     // Close the connection.
     if (shutdown(client_sock, SHUT_RDWR) == -1) {
-        perror("Closing socket");
+        perror("Shutdown socket");
         exit(EXIT_FAILURE);
     }
     if (close(client_sock) == -1) {
