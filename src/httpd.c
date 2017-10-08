@@ -10,6 +10,7 @@
 
 //61278
 
+const long TIME_INACTIVE = 30000000;
 const char *LOG_FILE = "log_file.log";
 FILE *log_fd;
 struct sockaddr_in serv_addr;
@@ -168,6 +169,17 @@ int main(int argc, char *argv[]) {
         write_head(client_sock, &client_addr); // Add any extra parameter
     }
 
+    // If time runs out
+    int connection[10];
+    int active[10];
+    for (int i = 0; i < 10; ++i) {
+        if(connection[i] != 0){
+            if(g_get_monotonic_time() - active[i] > TIME_INACTIVE){
+                printf("Connection ran out of time\n", i)
+            }
+        }
+    }
+
     // Close the connection.
     if (shutdown(client_sock, SHUT_RDWR) == -1) {
         perror("Shutdown socket");
@@ -177,5 +189,4 @@ int main(int argc, char *argv[]) {
         perror("Closing socket");
         exit(EXIT_FAILURE);
     }
-    return (EXIT_SUCCESS);
 }
