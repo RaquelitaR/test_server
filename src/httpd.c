@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
     } else if (strcmp(first[0], "PUT") == 0) {
         write_put(client_sock); // Add any extra parameter
     } else if (strcmp(first[0], "HEAD") == 0) {
-        write_head(client_sock, &client_addr, first[1]); // Add any extra parameter
+        write_head(client_sock, &client_addr); // Add any extra parameter
     }
 
     // Close the connection.
