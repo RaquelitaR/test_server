@@ -74,11 +74,11 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
 }
 
 // TODO: Return: HTTP/1.1 200 OK
-void write_head(int client_sock, const char *file) { // Add any extra parameter
-    char response[1024];
+void write_head(int client_sock) { // Add any extra parameter
+    /*char response[1024];
     (void)file;
     strcat(response, "HTTP/1.0 200 OK\r\n");
-    printf(client_sock, response, strlen(response), 0);
+    printf(client_sock, response, strlen(response), 0);*/
 }
 
 // TODO:
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
     } else if (strcmp(first[0], "PUT") == 0) {
         write_put(client_sock); // Add any extra parameter
     } else if (strcmp(first[0], "HEAD") == 0) {
-        write_head(client_sock, &client_addr); // Add any extra parameter
+        write_head(client_sock); // Add any extra parameter
     }
 
     // If time runs out
