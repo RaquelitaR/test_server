@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < 10; ++i) {
         if(connection[i] != 0){
             if(g_get_monotonic_time() - active[i] > TIME_INACTIVE){
-                printf("Connection ran out of time\n", i)
+                printf("Connection ran out of time\n", i);
             }
         }
     }
