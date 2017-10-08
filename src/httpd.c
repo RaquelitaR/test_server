@@ -1,3 +1,4 @@
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -158,7 +159,7 @@ int main(int argc, char *argv[]) {
     gchar **split = g_strsplit(request, "\n", -1);
     gchar **first = g_strsplit(*split, " ", -1);
 
-    // Checking which response the server
+    // Checking which response the server gets
     if (strcmp(first[0], "GET") == 0) {
         write_get(client_sock, &client_addr, first[1]);
     } else if (strcmp(first[0], "PUT") == 0) {
