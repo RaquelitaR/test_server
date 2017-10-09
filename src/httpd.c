@@ -26,7 +26,7 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     char body[4098];
     memset(&body, 0, sizeof(char) * 4098);
     strcat(body, "<!DOCTYPE html><html><head>");
-    strcat(body, "<title>Small Server</title>");
+    strcat(body, "<title> TEST_SERVER </title>");
     strcat(body, "</head>");
     strcat(body, "<body>");
     strcat(body, "<p>");
@@ -95,7 +95,7 @@ void print_logfile(){
     time.tv_sec = 0;
     gchar *now = g_time_val_to_iso8601(&time);
     fprintf(log_fd, ": %s %s %d\n", now, inet_ntoa(client_addr.sin_addr), status);
-    fputs(log_fd, inet_ntoa(client_addr.sin_addr));
+    fprintf(log_fd, inet_ntoa(client_addr.sin_addr));
     fclose(log_fd);
     close(client_sock);
     // This is not finished cause there is nothing written in the file yet
