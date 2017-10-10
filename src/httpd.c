@@ -10,8 +10,6 @@
 
 
 //61278
-
-const long TIME_INACTIVE = 30000000;
 const char *LOG_FILE = "log_file.log";
 FILE *log_fd;
 struct sockaddr_in serv_addr;
@@ -22,9 +20,13 @@ int port;
 // FUNCTIONS
 void print_logfile();
 void closeConnection();
-void closeInactiveConnection();
 
-
+// GET request has be generated in memory, and should be a HTML 5 page.
+// Content should include:
+// 1. URL of the requested page
+// 2. IP address and port number of the requested client
+// When you visit a browser it should display this format:
+// http://foo.com/page 123.123.123.123:45678
 void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) {
 
     char term[] = "\r\n";
@@ -35,6 +37,8 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     strcat(body, "</head>");
     strcat(body, "<body>");
     strcat(body, "<p>");
+    strcat(body, "<h1>");
+    strcat(body, "<b>");
 
     char string_port[16];
     memset(&string_port, 0, sizeof(char) * 16);
@@ -55,6 +59,8 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     strcat(body, ":");
     strcat(body, client_port);
 
+    strcat(body, "</b>");
+    strcat(body, "</h1>");
     strcat(body, "</p>");
     strcat(body, "</body>");
     strcat(body, "</html>");
@@ -84,6 +90,7 @@ void write_get(int client_sock, struct sockaddr_in *client_addr, char *webpage) 
     }
 }
 
+// HEAD request, just generate the header of the requested page.
 // TODO: Return: HTTP/1.1 200 OK
 void write_head(int client_sock) { // Add any extra parameter
     /*char response[1024];
@@ -92,6 +99,11 @@ void write_head(int client_sock) { // Add any extra parameter
     printf(client_sock, response, strlen(response), 0);*/
 }
 
+// PUT requests, the page has to be generated in memory and should be a HTML 5 page.
+// Content should include:
+// 1. URL of the requested page
+// 2. IP address and PORT of the requesting client,
+// 3. the data in the body of the PUT request
 // TODO:
 void write_put(int client_sock) { // Add any extra parameter
     // PUT is similar to the GET but instead of the body
@@ -102,11 +114,6 @@ void write_put(int client_sock) { // Add any extra parameter
 void print_logfile(){
 
     int status = 200;
-    /*GTimeVal time;
-    g_get_current_time(&time);
-    time.tv_sec = 00;
-    gchar *now = g_time_val_to_iso8601(&time);*/
-
     GTimeVal time;
     g_get_current_time(&time);
     time.tv_usec = 0;
@@ -116,35 +123,22 @@ void print_logfile(){
     fprintf(log_fd, "%s : %s:%d\n", now, inet_ntoa(client_addr.sin_addr), status);
     printf("%s : %s:%d\n", now, inet_ntoa(client_addr.sin_addr), status);
     g_free(now);
-    fprintf(log_fd, inet_ntoa(client_addr.sin_addr));
+    fprintf(log_fd, "%s", inet_ntoa(client_addr.sin_addr));
     fclose(log_fd);
     //close(client_sock);
 
 }
 
-// Close connection that have been inactive for to long
-void closeInactiveConnection(){
-    // If time runs out
-    int connection[10];
-    int active[10];
-    for (int i = 0; i < 10; ++i) {
-        if(connection[i] != 0){
-            if(g_get_monotonic_time() - active[i] > TIME_INACTIVE){
-                printf("Connection ran out of time\n", i, 10);
-                closeConnection();
-            }
-        }
-    }
-}
-
 // Close the connection.
 void closeConnection(){
-    if (shutdown(client_sock, SHUT_RDWR) == -1) {
-        perror("Shutdown socket");
-        exit(EXIT_FAILURE);
-    }
     if (close(client_sock) == -1) {
         perror("Closing socket");
+        exit(EXIT_FAILURE);
+    }
+    if (0 && shutdown(client_sock, SHUT_RDWR) == -1) {
+        //I wrote 0 && shutdown so the shutdown function does not run because it always fails.
+        // I don't know how to use this properly
+        perror("Shutdown socket");
         exit(EXIT_FAILURE);
     }
 }
@@ -216,7 +210,5 @@ int main(int argc, char *argv[]) {
     } else if (strcmp(first[0], "HEAD") == 0) {
         write_head(client_sock); // Add any extra parameter
     }
-
-    closeInactiveConnection();
     closeConnection();
 }

@@ -1,12 +1,12 @@
 # test_server
-Testing httpd server
+Testing httpd serv_addr
 ----
-# Sequential HTTP server
+# Sequential HTTP serv_addr
 
  * HTTP is implemented on top of TCP.
- * The server needs to accept and handle HEAD, GET, and POST requests.
+ * The serv_addr needs to accept and handle HEAD, GET, and POST requests.
  * It needs to parse the request and reply with a corresponding page.
- * The server only needs to handle a requests from a single client at a time.
+ * The serv_addr only needs to handle a requests from a single client_addr at a time.
  * Connections need not be persistent.
 
 The program takes the port number as an argument.
